@@ -18,6 +18,10 @@ namespace StatePattern
             this.OnUnfreeze = onUnfreeze;
         }
 
+        // 1#: Deposit 10; Close; Deposit 1 => Balance == 10
+        // 2#: Deposit 10; Deposit 1 => Balance == 11
+        // 6#: Deposit 10; Freeze , Deposit 1 => OnUnfreeze was called
+        // 7#: Deposit 10; Freeze , Deposit 1 => IsFrozen == false
         public void Deposit(decimal amount)
         {
             if (IsClosed)
@@ -29,6 +33,13 @@ namespace StatePattern
             }
             Balance += amount;
         }
+
+        // 3#: Deposit 10; Withdrow 1 => Balance == 9
+        // 4#: Deposit 10; Verify; Close; Withdrow 1 => Balance == 10
+        // 5#: Deposit 10; Verify; Withdrow 1 => Balance == 9
+        // 9#: Deposit 10; Verify; Freeze; Withdrow 1 => OnUnfreeze was called
+        // 10#: Deposit 10; Verify; Freeze; Withdrow 1 => IsFrozen == false
+        // 11#: Deposit 10; Verify; Withdrow 1 => OnUnfreeze was not called
         public void Withdrow(decimal amount)
         {
             if (!IsVerified)
