@@ -22,6 +22,7 @@ namespace StatePattern
         // 2#: Deposit 10; Deposit 1 => Balance == 11
         // 6#: Deposit 10; Freeze , Deposit 1 => OnUnfreeze was called
         // 7#: Deposit 10; Freeze , Deposit 1 => IsFrozen == false
+        // 8#: Deposit 10; Deposit 1 => OnUnfreeze was not called
         public void Deposit(decimal amount)
         {
             if (IsClosed)
