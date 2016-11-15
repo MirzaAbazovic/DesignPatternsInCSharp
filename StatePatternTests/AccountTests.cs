@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using StatePattern;
 using System;
@@ -46,15 +46,22 @@ namespace StatePatternTests
         }
         // 3#: Deposit 10; Withdrow 1 => Balance == 9
         [Test]
+        //[ExpectedException(typeof(UnauthorizedAccessException), "Account holder is not verified")]
         public void ShuldNotWithdrowAsUnverifiedAccount()
         {
-            //Arange
-            Account account = new Account(() => { });
-            account.Deposit(10m);
-            //Act
-            account.Withdrow(1m);
-            //Assert
-            NUnit.Framework.Assert.AreEqual(account.Balance, 10m);
+            try
+            {
+                //Arange
+                Account account = new Account(() => { });
+                account.Deposit(10m);
+                //Act
+                account.Withdrow(1m);
+                Assert.Fail();
+            }
+            catch (UnauthorizedAccessException exc)
+            {
+                Assert.AreEqual(exc.Message, "Account holder is not verified");
+            }
         }
         // 4#: Deposit 10; Verify; Close; Withdrow 1 => Balance == 10
         [Test]
@@ -112,7 +119,7 @@ namespace StatePatternTests
             //Act
             account.Deposit(10m);
             //Assert
-            NUnit.Framework.Assert.AreEqual(account.IsFrozen,false);
+            NUnit.Framework.Assert.IsNotInstanceOf<AccountStateFreezed>(account.State);
         }
         // 8#: Deposit 10; Deposit 1 => OnUnfreeze was not called
         [Test]
@@ -161,7 +168,7 @@ namespace StatePatternTests
             //Act
             account.Withdrow(1m);
             //Assert
-            NUnit.Framework.Assert.AreEqual(account.IsFrozen, false);
+            NUnit.Framework.Assert.IsNotInstanceOf<AccountStateFreezed>(account.State);
         }
         // 11#: Deposit 10; Verify; Withdrow 1 => OnUnfreeze was not called
         [Test]
