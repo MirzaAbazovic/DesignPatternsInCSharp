@@ -109,3 +109,8 @@ public class Account
         }
     }
 ```
+
+
+
+## Mediator pattern
+https://github.com/MirzaAbazovic/mediator-pattern
